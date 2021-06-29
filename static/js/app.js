@@ -4,31 +4,30 @@ function buildMetadata(selection) {
         console.log(sampleData);
 
         var parsedData = sampleData.metadata;
-        console.log("parsed data")
+        console.log("parsed data inside buildMetadata function")
         console.log(parsedData);
 
         var sample = parsedData.filter(item => item.id == selection);
-        console.log("sample:");
+        console.log("showing sample[0]:");
         console.log(sample[0]);
 
         var metadata = d3.select("#sample-metadata").html("");
-        
+
         Object.entries(sample[0]).forEach(([key, value]) => {
             metadata.append("p").text(`${key}: ${value}`);
         });
-        // show function is looping in console
-        console.log("repeat");
+
+        console.log("next again");
         console.log(metadata);
     });
 }
 
 // create charts using sample from user input (html)
-// iterate through each value set to retrieve related point
 function buildCharts(selection) {
     d3.json("samples.json").then((sampleData) => {
 
         var parsedData = sampleData.samples;
-        console.log("parsed data")
+        console.log("parsed data inside buildCharts function")
         console.log(parsedData);
 
         var sampleDict = parsedData.filter(item => item.id == selection)[0];
@@ -47,6 +46,7 @@ function buildCharts(selection) {
 
         var reformattedLabels = [];
         barChartLabels.forEach((label) => {
+            reformattedLabels.push("OTU " + label);
         });
         console.log("reformatted");
         console.log(reformattedLabels);
@@ -82,39 +82,38 @@ function buildCharts(selection) {
         var bubbleChartData = [bubbleChartTrace];
         var layout = {
             showlegend: false,
-            height: 500,
-            width: 800,
+            height: 600,
+            width: 1000,
             xaxis: {
-                title: "ID"
+                title: "OTU ID"
             }
         };
         Plotly.newPlot("bubble", bubbleChartData, layout);
     });
 }
 
-// populate menu with sample ids
+// populate menu with IDs on page load
 function init() {
     d3.json("samples.json").then((data) => {
         var parsed = data.names;
-        console.log("parsed data")
+        console.log("parsed init data")
         console.log(parsed);
 
-        // create dropwon menu from each selectable value
         var dropdownMenu = d3.select("#selDataset");
         parsed.forEach((name) => {
             dropdownMenu.append("option").property("value", name).text(name);
         })
-        // build charts using data in position [0] (first in list)
+
         buildMetadata(parsed[0]);
         buildCharts(parsed[0]);
     });
 }
 
-//  update with new inputs
+//  rerun with new inputs
 function optionChanged(newSelection) {
     buildMetadata(newSelection); 
     buildCharts(newSelection);
 }
 
-// initialize scipt
+// initialize on load
 init();
