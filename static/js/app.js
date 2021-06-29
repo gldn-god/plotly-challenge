@@ -22,9 +22,10 @@ function buildMetadata(selection) {
     });
 }
 
-// create charts using sample
+// create charts using sample from user input (html)
 function buildCharts(selection) {
     d3.json("samples.json").then((sampleData) => {
+
         var parsedData = sampleData.samples;
         console.log("parsed data inside buildCharts function")
         console.log(parsedData);
@@ -45,7 +46,6 @@ function buildCharts(selection) {
 
         var reformattedLabels = [];
         barChartLabels.forEach((label) => {
-            reformattedLabels.push("OTU " + label);
         });
         console.log("reformatted");
         console.log(reformattedLabels);
