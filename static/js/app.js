@@ -1,21 +1,21 @@
-// create metadata for dropdown menus
+// populate dropdown menu with options for user input
 function buildMetadata(selection) {
     d3.json("samples.json").then((sampleData) => {
-
+        console.log(sampleData);
 
         var parsedData = sampleData.metadata;
-
+        console.log(parsedData);
 
         var sample = parsedData.filter(item => item.id == selection);
-
+        console.log(sample[0]);
 
         var metadata = d3.select("#sample-metadata").html("");
-
+        
         Object.entries(sample[0]).forEach(([key, value]) => {
             metadata.append("p").text(`${key}: ${value}`);
         });
-        // show function is looping in console
-
+        // record metadata
+        console.log(metadata);
     });
 }
 
@@ -25,10 +25,10 @@ function buildCharts(selection) {
     d3.json("samples.json").then((sampleData) => {
 
         var parsedData = sampleData.samples;
-
+        console.log(parsedData);
 
         var sampleDict = parsedData.filter(item => item.id == selection)[0];
-
+        console.log(sampleDict);
 
         var sampleValues = sampleDict.sample_values; 
         var barChartValues = sampleValues.slice(0, 10).reverse();
@@ -36,16 +36,16 @@ function buildCharts(selection) {
 
         var idValues = sampleDict.otu_ids;
         var barChartLabels = idValues.slice(0, 10).reverse();
-
+        console.log(barChartLabels);
 
         var reformattedLabels = [];
         barChartLabels.forEach((label) => {
         });
-
+        console.log(reformattedLabels);
 
         var hovertext = sampleDict.otu_labels;
         var barCharthovertext = hovertext.slice(0, 10).reverse();
-
+        console.log(barCharthovertext);
 
         // create barchart
         var barChartTrace = {
@@ -72,7 +72,7 @@ function buildCharts(selection) {
         };
         var bubbleChartData = [bubbleChartTrace];
         var layout = {
-            showlegend: false,
+            showlegend: true,
             height: 500,
             width: 800,
             xaxis: {
@@ -87,6 +87,7 @@ function buildCharts(selection) {
 function init() {
     d3.json("samples.json").then((data) => {
         var parsed = data.names;
+        console.log(parsed);
 
         // create dropwon menu from each selectable value
         var dropdownMenu = d3.select("#selDataset");
