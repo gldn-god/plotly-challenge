@@ -10,3 +10,8 @@ function init() {
         plotCharts(initId);
     }));
 }
+
+
+// select input variables
+var idSelect = d3.select("#selDataset");
+var demographicsTable = d3.select("#sample-metadata");
