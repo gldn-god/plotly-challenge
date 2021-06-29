@@ -1,3 +1,8 @@
+// reset data from html tags
+function resetData() {
+    demographicsTable.html("");
+};
+
 // populate menu with IDs, draw charts using first record by default 
 function init() {
     resetData();
@@ -15,3 +20,4 @@ function init() {
 // select input variables
 var idSelect = d3.select("#selDataset");
 var demographicsTable = d3.select("#sample-metadata");
+
