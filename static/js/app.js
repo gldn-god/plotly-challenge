@@ -32,7 +32,7 @@ function buildCharts(selection) {
 
         var sampleValues = sampleDict.sample_values; 
         var barChartValues = sampleValues.slice(0, 10).reverse();
-
+        console.log(barChartValues);
 
         var idValues = sampleDict.otu_ids;
         var barChartLabels = idValues.slice(0, 10).reverse();
