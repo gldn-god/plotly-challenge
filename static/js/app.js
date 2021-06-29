@@ -1,8 +1,12 @@
 // create metadata for dropdown menus
 function buildMetadata(selection) {
+
+    // Read the json data
     d3.json("samples.json").then((sampleData) => {
+
         console.log(sampleData);
 
+        // Parse and filter the data to get the sample's metadata
         var parsedData = sampleData.metadata;
         console.log("parsed data inside buildMetadata function")
         console.log(parsedData);
@@ -11,6 +15,7 @@ function buildMetadata(selection) {
         console.log("showing sample[0]:");
         console.log(sample[0]);
 
+        // Specify the location of the metadata and update it
         var metadata = d3.select("#sample-metadata").html("");
 
         Object.entries(sample[0]).forEach(([key, value]) => {
@@ -22,10 +27,14 @@ function buildMetadata(selection) {
     });
 }
 
-// create charts using sample from user input (html)
+// Define a function that will create charts for given sample
 function buildCharts(selection) {
+
+    // Read the json data
     d3.json("samples.json").then((sampleData) => {
 
+        // Parse and filter the data to get the sample's OTU data
+        // Pay attention to what data is required for each chart
         var parsedData = sampleData.samples;
         console.log("parsed data inside buildCharts function")
         console.log(parsedData);
@@ -33,6 +42,7 @@ function buildCharts(selection) {
         var sampleDict = parsedData.filter(item => item.id == selection)[0];
         console.log("sampleDict")
         console.log(sampleDict);
+
 
         var sampleValues = sampleDict.sample_values; 
         var barChartValues = sampleValues.slice(0, 10).reverse();
@@ -48,6 +58,7 @@ function buildCharts(selection) {
         barChartLabels.forEach((label) => {
             reformattedLabels.push("OTU " + label);
         });
+
         console.log("reformatted");
         console.log(reformattedLabels);
 
@@ -56,7 +67,8 @@ function buildCharts(selection) {
         console.log("otu_labels");
         console.log(barCharthovertext);
 
-        // create barchart
+        // Create bar chart in correct location
+
         var barChartTrace = {
             type: "bar",
             y: reformattedLabels,
@@ -66,9 +78,11 @@ function buildCharts(selection) {
         };
 
         var barChartData = [barChartTrace];
+
         Plotly.newPlot("bar", barChartData);
 
-        // create bubble chart
+        // Create bubble chart in correct location
+
         var bubbleChartTrace = {
             x: idValues,
             y: sampleValues,
@@ -79,7 +93,9 @@ function buildCharts(selection) {
                 size: sampleValues
             }
         };
+
         var bubbleChartData = [bubbleChartTrace];
+
         var layout = {
             showlegend: false,
             height: 600,
@@ -88,24 +104,30 @@ function buildCharts(selection) {
                 title: "OTU ID"
             }
         };
+
         Plotly.newPlot("bubble", bubbleChartData, layout);
     });
 }
 
 // populate menu with IDs on page load
 function init() {
+
     d3.json("samples.json").then((data) => {
         var parsed = data.names;
         console.log("parsed init data")
         console.log(parsed);
 
+        // Add dropdown option for each sample
         var dropdownMenu = d3.select("#selDataset");
+
         parsed.forEach((name) => {
             dropdownMenu.append("option").property("value", name).text(name);
         })
 
+        // Use first sample to build metadata and initial plots
         buildMetadata(parsed[0]);
         buildCharts(parsed[0]);
+
     });
 }
 
