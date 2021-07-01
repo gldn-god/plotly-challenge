@@ -1,49 +1,44 @@
-  
-// Define a function that will create metadata for given sample
+  // create metadata using selection
 function buildMetadata(selection) {
 
-    // Read the json data
+    // read json using d3
     d3.json("samples.json").then((sampleData) => {
-
         console.log(sampleData);
 
-        // Parse and filter the data to get the sample's metadata
+        // retrieve parsed data for sample
         var parsedData = sampleData.metadata;
-        console.log("parsed data inside buildMetadata function")
+        console.log("parsed data")
         console.log(parsedData);
 
         var sample = parsedData.filter(item => item.id == selection);
         console.log("showing sample[0]:");
         console.log(sample[0]);
 
-        // Specify the location of the metadata and update it
+        // declare metadata location, load key value pairs
         var metadata = d3.select("#sample-metadata").html("");
-
         Object.entries(sample[0]).forEach(([key, value]) => {
             metadata.append("p").text(`${key}: ${value}`);
         });
 
-        console.log("next again");
+        console.log("next");
         console.log(metadata);
     });
 }
 
-// Define a function that will create charts for given sample
+// create bar, buddle charts
 function buildCharts(selection) {
 
-    // Read the json data
+    // read json using d3
     d3.json("samples.json").then((sampleData) => {
 
-        // Parse and filter the data to get the sample's OTU data
-        // Pay attention to what data is required for each chart
+        // grab sample's OTU data
         var parsedData = sampleData.samples;
-        console.log("parsed data inside buildCharts function")
+        console.log("parsed data")
         console.log(parsedData);
 
         var sampleDict = parsedData.filter(item => item.id == selection)[0];
         console.log("sampleDict")
         console.log(sampleDict);
-
 
         var sampleValues = sampleDict.sample_values; 
         var barChartValues = sampleValues.slice(0, 10).reverse();
@@ -68,8 +63,7 @@ function buildCharts(selection) {
         console.log("otu_labels");
         console.log(barCharthovertext);
 
-        // Create bar chart in correct location
-
+        // bar chart, load to html tag reference
         var barChartTrace = {
             type: "bar",
             y: reformattedLabels,
@@ -79,11 +73,9 @@ function buildCharts(selection) {
         };
 
         var barChartData = [barChartTrace];
-
         Plotly.newPlot("bar", barChartData);
 
-        // Create bubble chart in correct location
-
+        // bubble chart, load to html tag reference
         var bubbleChartTrace = {
             x: idValues,
             y: sampleValues,
@@ -94,18 +86,17 @@ function buildCharts(selection) {
                 size: sampleValues
             }
         };
-
         var bubbleChartData = [bubbleChartTrace];
 
+        // define parameters for bubble chart layout
         var layout = {
             showlegend: false,
-            height: 600,
-            width: 1000,
+            height: 500,
+            width: 800,
             xaxis: {
                 title: "OTU ID"
             }
         };
-
         Plotly.newPlot("bubble", bubbleChartData, layout);
     });
 }
@@ -113,22 +104,21 @@ function buildCharts(selection) {
 // populate menu with IDs on page load
 function init() {
 
-    // Read json data
+    // read json using d3
     d3.json("samples.json").then((data) => {
 
-        // Parse and filter data to get sample names
+        // retrieve sample names
         var parsed = data.names;
-        console.log("parsed data inside init function")
+        console.log("parsed data")
         console.log(parsed);
 
-        // Add dropdown option for each sample
+        // dropwdown for samples
         var dropdownMenu = d3.select("#selDataset");
-
         parsed.forEach((name) => {
             dropdownMenu.append("option").property("value", name).text(name);
         })
 
-        // Use first sample to build metadata and initial plots
+        // declare first sample be used for initial metadata, charts 
         buildMetadata(parsed[0]);
         buildCharts(parsed[0]);
 
