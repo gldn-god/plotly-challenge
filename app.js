@@ -14,12 +14,11 @@ function buildMetadata(selection) {
         console.log("showing sample[0]:");
         console.log(sample[0]);
 
-        // declare metadata location, load key value pairs
+        // declare metadata html location, load key value pairs
         var metadata = d3.select("#sample-metadata").html("");
         Object.entries(sample[0]).forEach(([key, value]) => {
             metadata.append("p").text(`${key}: ${value}`);
         });
-
         console.log("next");
         console.log(metadata);
     });
@@ -71,7 +70,6 @@ function buildCharts(selection) {
             text: barCharthovertext,
             orientation: 'h'
         };
-
         var barChartData = [barChartTrace];
         Plotly.newPlot("bar", barChartData);
 
@@ -117,7 +115,6 @@ function init() {
         parsed.forEach((name) => {
             dropdownMenu.append("option").property("value", name).text(name);
         })
-
         // declare first sample be used for initial metadata, charts 
         buildMetadata(parsed[0]);
         buildCharts(parsed[0]);
